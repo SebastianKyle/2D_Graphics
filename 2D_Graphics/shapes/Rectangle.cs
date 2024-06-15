@@ -10,23 +10,65 @@ namespace _2D_Graphics
 {
     internal class Rectangle : Shape
     {
-        Point vertex2, vertex4;
+        Point vertex2, vertex3, vertex4;
 
-        public Rectangle(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, Boolean isFilling)
+        public Rectangle(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, Boolean isFilling, Boolean isRegular = false)
             : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling)
         {
-            vertex2.X = End.X;
-            vertex2.Y = Start.Y;
-            vertex4.X = Start.X;
-            vertex4.Y = End.Y;
+            if (isRegular)
+            {
+                setToRegularShape();
+            }
+            else
+            {
+                setToNormalShape();
+            }
 
             this.vertices = new List<Point>();
             this.vertices.Add(pStart);
             this.vertices.Add(vertex2);
-            this.vertices.Add(pEnd);
+            this.vertices.Add(vertex3);
             this.vertices.Add(vertex4);
 
             setCtrlPts();
+        }
+
+        public override void setToRegularShape()
+        { 
+            int dy = pEnd.Y - pStart.Y;
+            int dx = pEnd.X - pStart.X;
+
+            int a = Math.Min(Math.Abs(dx), Math.Abs(dy));
+
+            if (Math.Abs(dx) > Math.Abs(dy))
+            {
+                vertex2.X = dx > 0 ? pStart.X + a : pStart.X - a;
+                vertex2.Y = pStart.Y;
+                vertex4.X = pStart.X;
+                vertex4.Y = pStart.Y + dy;
+
+                vertex3.X = dx > 0 ? pStart.X + a : pStart.X - a;
+                vertex3.Y = pStart.Y + dy;
+            }
+            else
+            {
+                vertex2.X = pStart.X + dx;
+                vertex2.Y = pStart.Y;
+                vertex4.X = pStart.X;
+                vertex4.Y = dy > 0 ? pStart.Y + a : pStart.Y - a;
+
+                vertex3.X = pStart.X + dx;
+                vertex3.Y = dy > 0 ? pStart.Y + a : pStart.Y - a;
+            }
+        }
+
+        public override void setToNormalShape()
+        {
+            vertex2.X = pEnd.X;
+            vertex2.Y = pStart.Y;
+            vertex4.X = pStart.X;
+            vertex4.Y = pEnd.Y;
+            vertex3 = new Point(pEnd.X, pEnd.Y);
         }
 
         public override void showShape(OpenGL gl)
@@ -67,14 +109,14 @@ namespace _2D_Graphics
         public override void setCtrlPts()
         {
             Point topLeft, topMid, topRight, midLeft, midRight, bottomLeft, bottomMid, bottomRight;
-            topLeft = new Point(pStart.X, pStart.Y);
-            topMid = new Point((int)Math.Round((pStart.X + pEnd.X) / 2.0), pStart.Y);
-            topRight = new Point(pEnd.X, pStart.Y);
-            midLeft = new Point(pStart.X, (int)Math.Round((pStart.Y + pEnd.Y) / 2.0));
-            midRight = new Point(pEnd.X, (int)Math.Round((pStart.Y + pEnd.Y) / 2.0));
-            bottomLeft = new Point(pStart.X, pEnd.Y);
-            bottomMid = new Point((int)Math.Round((pStart.X + pEnd.X) / 2.0), pEnd.Y);
-            bottomRight = new Point(pEnd.X, pEnd.Y);
+            topLeft = new Point(vertices[0].X, vertices[0].Y);
+            topMid = new Point((int)Math.Round((vertices[0].X + vertices[2].X) / 2.0), vertices[0].Y);
+            topRight = new Point(vertices[2].X, vertices[0].Y);
+            midLeft = new Point(vertices[0].X, (int)Math.Round((vertices[0].Y + vertices[2].Y) / 2.0));
+            midRight = new Point(vertices[2].X, (int)Math.Round((vertices[0].Y + vertices[2].Y) / 2.0));
+            bottomLeft = new Point(vertices[0].X, vertices[2].Y);
+            bottomMid = new Point((int)Math.Round((vertices[0].X + vertices[2].X) / 2.0), vertices[2].Y);
+            bottomRight = new Point(vertices[2].X, vertices[2].Y);
 
             ctrlPts = new List<Point>();
             ctrlPts.Add(topLeft);

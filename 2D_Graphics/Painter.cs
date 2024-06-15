@@ -64,6 +64,8 @@ namespace _2D_Graphics
 
         public bool isDown;
 
+        public bool isRegular;
+
         public Painter()
         {
             paintColor = Color.White;
@@ -100,6 +102,8 @@ namespace _2D_Graphics
             isRotate = false;
             isDown = false;
             isSinglePtMove = false;
+
+            isRegular = false;
         }
 
         public void showShapes(OpenGL gl)
@@ -179,19 +183,23 @@ namespace _2D_Graphics
             }
             else if (shapeType == ShapeType.Ellipse)
             {
-                //curShape = new Ellipse(vertices, pStart, pEnd, thick, colorUserColor, color_fill, isFill);
+                curShape = new Ellipse(vertices, pStart, pEnd, thick, paintColor, fillColor, isFilling, isRegular);
+            }
+            else if (shapeType == ShapeType.Triangle)
+            {  
+                curShape = new Triangle(vertices, pStart, pEnd, thick, paintColor, fillColor, isFilling, isRegular);
             }
             else if (shapeType == ShapeType.Rectangle)
             {
-                curShape = new Rectangle(vertices, pStart, pEnd, thick, paintColor, fillColor, isFilling);
+                curShape = new Rectangle(vertices, pStart, pEnd, thick, paintColor, fillColor, isFilling, isRegular);
             }
             else if (shapeType == ShapeType.Pentagon)
             {
-                //curShape = new RegularPentagon(vertices, pStart, pEnd, thick, colorUserColor, color_fill, isFill);
+                curShape = new Pentagon(vertices, pStart, pEnd, thick, paintColor, fillColor, isFilling);
             }
             else if (shapeType == ShapeType.Hexagon)
             {
-                //curShape = new RegularHexagon(vertices, pStart, pEnd, thick, colorUserColor, color_fill, isFill);
+                curShape = new Hexagon(vertices, pStart, pEnd, thick, paintColor, fillColor, isFilling);
             }
             else if (shapeType == ShapeType.Polygon)
             {
@@ -324,6 +332,11 @@ namespace _2D_Graphics
         {
             verticesTransformed[idxCtrlPt] = desPt;
             ctrlPtsTransformed[idxCtrlPt] = desPt;
+        }
+
+        public void setIsRegular(bool isRegular)
+        {
+            this.isRegular = isRegular;
         }
 
     }

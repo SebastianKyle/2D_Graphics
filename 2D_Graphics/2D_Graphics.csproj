@@ -55,6 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="shapes\Circle.cs" />
+    <Compile Include="shapes\Ellipse.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,12 +69,15 @@
     <Compile Include="Graphics.Designer.cs">
       <DependentUpon>Graphics.cs</DependentUpon>
     </Compile>
-    <Compile Include="Line.cs" />
+    <Compile Include="shapes\Hexagon.cs" />
+    <Compile Include="shapes\Line.cs" />
     <Compile Include="Painter.cs" />
+    <Compile Include="shapes\Pentagon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rectangle.cs" />
-    <Compile Include="Shape.cs" />
+    <Compile Include="shapes\Rectangle.cs" />
+    <Compile Include="shapes\Shape.cs" />
+    <Compile Include="shapes\Triangle.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -125,6 +130,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\TriangleIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="fillers\" />
+    <Folder Include="transformations\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

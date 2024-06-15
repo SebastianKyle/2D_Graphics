@@ -334,6 +334,16 @@ namespace _2D_Graphics
             {
                 if (painter.shapeType != ShapeType.Polygon)
                 {
+                    bool isShiftPressed = (Control.ModifierKeys & Keys.Shift) == Keys.Shift;
+                    if (isShiftPressed)
+                    {
+                        painter.isRegular = true;
+                    }
+                    else
+                    {
+                        painter.isRegular = false;
+                    }
+
                     painter.pEnd = e.Location;
                 }
                 else
@@ -401,7 +411,7 @@ namespace _2D_Graphics
         private void btnCircle_Click(object sender, EventArgs e)
         {
             painter.turnOffActiveMode();
-            painter.shapeType = ShapeType.Circle;
+            painter.shapeType = ShapeType.Ellipse; // Initial set as Ellipse, change to Circle when Shift pressed
         }
 
         private void btnRectangle_Click(object sender, EventArgs e)

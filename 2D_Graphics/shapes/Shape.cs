@@ -37,7 +37,7 @@ namespace _2D_Graphics
         protected Boolean preserveRatio;
         public double angleRotated;
 
-        public Shape(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, Boolean isFilling)
+        public Shape(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, Boolean isFilling, Boolean isRegular = false)
         {
             preserveRatio = false;
             pStart = Start;
@@ -50,6 +50,12 @@ namespace _2D_Graphics
             shapePts = new List<Point>();
             angleRotated = 0;
         }
+
+        public virtual void calculateShapePts() { }
+
+        public virtual void setToRegularShape() { }
+
+        public virtual void setToNormalShape() { }
 
         public virtual void showShape(OpenGL gl) { }
 
