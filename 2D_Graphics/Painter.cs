@@ -1,11 +1,15 @@
-﻿using SharpGL;
+﻿using _2D_Graphics.shapes;
+using _2D_Graphics.transformations;
+using SharpGL;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace _2D_Graphics
 {
@@ -38,7 +42,7 @@ namespace _2D_Graphics
 
         public Stopwatch stopwatch;
 
-        //public Transformer transformer;
+        public Transformer transformer;
 
         public List<Point> vertices;
         public int nVertices;
@@ -95,7 +99,7 @@ namespace _2D_Graphics
             pts = new List<Point>();
             ctrlPts = new List<Point>();
 
-            //transformer = null;
+            transformer = null;
 
             isTranslate = false;
             isScale = false;
@@ -177,10 +181,6 @@ namespace _2D_Graphics
             {
                 curShape = new Line(vertices, pStart, pEnd, thick, paintColor, fillColor, isFilling);
             }
-            else if (shapeType == ShapeType.Circle)
-            {
-                //curShape = new Circle(vertices, pStart, pEnd, thick, colorUserColor, color_fill, isFill);
-            }
             else if (shapeType == ShapeType.Ellipse)
             {
                 curShape = new Ellipse(vertices, pStart, pEnd, thick, paintColor, fillColor, isFilling, isRegular);
@@ -203,7 +203,7 @@ namespace _2D_Graphics
             }
             else if (shapeType == ShapeType.Polygon)
             {
-                //curShape = new Polygon(vertices, pStart, pEnd, thick, colorUserColor, color_fill, isFill);
+                curShape = new Polygon(vertices, pStart, pEnd, thick, paintColor, fillColor, isFilling);
             }
         }
 
@@ -302,17 +302,155 @@ namespace _2D_Graphics
 
         public void handleTranslate()
         {
+            verticesTransformed = transformer.transformVerts(vertices, vertices.Count);
+            ctrlPtsTransformed = transformer.transformVerts(ctrlPts, ctrlPts.Count);
 
+            if (shapeType == ShapeType.Ellipse)
+            {
+                ptsTransformed = transformer.transformVerts(pts, pts.Count);
+            }
+
+            centerTransformed = transformer.transformPoint(center);
         }
 
-        public void handleScale(Point fixedPt)
+        public void handleScale(Point cur)
         {
+            Point vcc = new Point(cur.X - center.X, cur.Y - center.Y);  // Vector cur-center
+            double lenVcc = Math.Sqrt(vcc.X * vcc.X + vcc.Y * vcc.Y);   // vcc norm
 
+            Point voc = new Point(oldPos.X - center.X, oldPos.Y - center.Y);    // Vector old-center
+            double lenVoc = Math.Sqrt(voc.X * voc.X + voc.Y * voc.Y);           // voc norm
+
+            double sx, sy;
+            Point fixedPt;
+            if (shapeType == ShapeType.Pentagon || shapeType == ShapeType.Hexagon || isRegular)
+            {
+                fixedPt = new Point(ctrlPts[(idxCtrlPt + 4) % 8].X, ctrlPts[(idxCtrlPt + 4) % 8].Y);
+
+                Point vcf = new Point(cur.X - fixedPt.X, cur.Y - fixedPt.Y);    // Vector cur-fixed
+                double lenVcf = Math.Sqrt(vcf.X * vcf.X + vcf.Y * vcf.Y);       // vcf norm
+                Point vof = new Point(oldPos.X - fixedPt.X, oldPos.Y - fixedPt.Y);  // Vector old-fixed
+                double lenVof = Math.Sqrt(vof.X * vof.X + vof.Y * vof.Y);           // vof norm
+
+                sy = sx = lenVcf / lenVof;
+            }
+            else if (shapeType == ShapeType.Line || shapeType == ShapeType.Polygon)
+            {
+                sx = vcc.X * 1.0 / voc.X;
+                sy = vcc.Y * 1.0 / voc.Y;
+
+                fixedPt = new Point(center.X, center.Y);
+            }
+            else
+            {
+                fixedPt = new Point(ctrlPts[(idxCtrlPt + 4) % 8].X, ctrlPts[(idxCtrlPt + 4) % 8].Y);
+
+                Point vcf = new Point(cur.X - fixedPt.X, cur.Y - fixedPt.Y);
+                double lenVcf = Math.Sqrt(vcf.X * vcf.X + vcf.Y * vcf.Y);
+                Point vof = new Point(oldPos.X - fixedPt.X, oldPos.Y - fixedPt.Y);
+                double lenVof = Math.Sqrt(vof.X * vof.X + vof.Y * vof.Y);
+
+                if (idxCtrlPt == 1 || idxCtrlPt == 5) // Scale vertically
+                {
+                    sx = 1;
+                    sy = lenVcf / lenVof;
+                }
+                else if (idxCtrlPt == 3 || idxCtrlPt == 7) // Scale horixontally
+                {
+                    sy = 1;
+                    sx = lenVcf / lenVof;
+                }
+                else // Scale diagonally
+                {
+                    sx = vcf.X * 1.0 / vof.X;
+                    sy = vcf.Y * 1.0 / vof.Y;
+                }
+            }
+
+            transformer = new Transformer();
+            transformer.scale(fixedPt, sx, sy);
+
+            if (shapeType == ShapeType.Ellipse)
+            {
+                Transformer tmpTrans = new Transformer();
+                tmpTrans.rotate(center, -curShape.angleRotated);
+                List<Point> tmpVertices = tmpTrans.transformVerts(vertices, vertices.Count);    // Rotate to original orientation
+                tmpVertices = transformer.transformVerts(tmpVertices, tmpVertices.Count);       // Scale
+
+                Shape tempElip = new Ellipse(null, tmpVertices[1], tmpVertices[2], thick, paintColor, fillColor, isFilling, isRegular);
+                List<Point> tmpPts = tempElip.getPoints();
+
+                curShape.setCtrlPts();
+                List<Point> tmpCtrlPts = tempElip.getCtrlPoints();
+
+                transformer.setMatCompositeToIdentity();
+                transformer.rotate(center, curShape.angleRotated);      // Rotate back to current orientation
+                verticesTransformed = transformer.transformVerts(tmpVertices, tmpVertices.Count);
+                ptsTransformed = transformer.transformVerts(tmpPts, tmpPts.Count);
+                ctrlPtsTransformed = transformer.transformVerts(tmpCtrlPts, tmpCtrlPts.Count);
+            } 
+            else if (shapeType == ShapeType.Rectangle)
+            {
+                Transformer tmpTrans = new Transformer();
+                tmpTrans.rotate(center, -curShape.angleRotated);
+                List<Point> tmpVertices = tmpTrans.transformVerts(vertices, vertices.Count);
+                tmpVertices = transformer.transformVerts(tmpVertices, tmpVertices.Count);
+
+                Shape tmpRec = new Rectangle(null, tmpVertices[0], tmpVertices[2], thick, paintColor, fillColor, isFilling, isRegular);
+
+                List<Point> tmpCtrlPts = tmpRec.getCtrlPoints();
+
+                transformer.setMatCompositeToIdentity();
+                transformer.rotate(center, curShape.angleRotated);
+                verticesTransformed = transformer.transformVerts(tmpVertices, tmpVertices.Count);
+                ctrlPtsTransformed = transformer.transformVerts(tmpCtrlPts, tmpCtrlPts.Count);
+            }
+            else if (shapeType == ShapeType.Triangle)
+            {
+                Transformer tmpTrans = new Transformer();
+                tmpTrans.rotate(center, -curShape.angleRotated);
+                List<Point> tmpVertices = tmpTrans.transformVerts(vertices, vertices.Count);
+                tmpVertices = transformer.transformVerts(tmpVertices, tmpVertices.Count);
+
+                Shape tmpTri = new Triangle(null, new Point(tmpVertices[1].X, tmpVertices[0].Y), tmpVertices[2], thick, paintColor, fillColor, isFilling, isRegular);
+
+                List<Point> tmpCtrlPts = tmpTri.getCtrlPoints();
+
+                transformer.setMatCompositeToIdentity();
+                transformer.rotate(center, curShape.angleRotated);
+                verticesTransformed = transformer.transformVerts(tmpVertices, tmpVertices.Count);
+                ctrlPtsTransformed = transformer.transformVerts(tmpCtrlPts, tmpCtrlPts.Count);
+            }
+            else
+            {
+                verticesTransformed = transformer.transformVerts(vertices, vertices.Count);
+                ctrlPtsTransformed = transformer.transformVerts(ctrlPts, ctrlPts.Count); 
+
+            }
         }
 
-        public void handleRotate(Point refPt)
+        public void handleRotate(Point cur)
         {
+            Point vcc = new Point(cur.X - center.X, cur.Y - center.Y);  // Vector cur-center
+            double lenVcc = Math.Sqrt(vcc.X * vcc.X + vcc.Y * vcc.Y);   // vcc norm
 
+            Point voc = new Point(oldPos.X - center.X, oldPos.Y - center.Y);    // Vector old-center
+            double lenVoc = Math.Sqrt(voc.X * voc.X + voc.Y * voc.Y);           // voc norm
+
+            angle = Math.Acos((vcc.X * voc.X + vcc.Y * voc.Y) / (lenVcc * lenVoc));
+            if (voc.X * vcc.Y - voc.Y * vcc.X < 0)  // z-value of cross product < 0 -> counter-clockwise
+            {
+                angle *= -1;
+            }
+
+            transformer = new Transformer();
+            transformer.rotate(center, angle);
+            verticesTransformed = transformer.transformVerts(vertices, vertices.Count);
+            if (shapeType == ShapeType.Ellipse)
+            {
+                ptsTransformed = transformer.transformVerts(pts, pts.Count);
+            }
+            ctrlPtsTransformed = transformer.transformVerts(ctrlPts, ctrlPts.Count);
         }
 
         public void finishTransform()

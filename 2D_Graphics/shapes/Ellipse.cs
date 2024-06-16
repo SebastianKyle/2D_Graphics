@@ -36,6 +36,11 @@ namespace _2D_Graphics
 
         public override void calculateShapePts()
         {
+            if (shapePts.Count != 0)
+            {
+                shapePts.Clear();
+            }
+
             // Calculate rx^2, ry^2, 2*rx^2, 2*ry^2
             int rx2 = rx * rx;
             int ry2 = ry * ry;
@@ -52,7 +57,7 @@ namespace _2D_Graphics
             addEllipsePts(x, y);
 
             // Region 1
-            p = Convert.ToInt32(ry2 - (rx2 * ry) + (0.25 * rx2));
+            p = ry2 - (rx2 * ry) + (1 / 4 * rx2);
             while (px < py)
             {
                 x++;
@@ -72,7 +77,7 @@ namespace _2D_Graphics
             }
 
             // Region 2
-            p = Convert.ToInt32(ry2 * (x + 0.5) * (x + 0.5) + rx2 * (y - 1) * (y - 1) - rx2 * ry2);
+            p = ry2 * (x + 1 / 2) * (x + 1 / 2) + rx2 * (y - 1) * (y - 1) - rx2 * ry2;
             while (y > 0)
             {
                 y--;
@@ -134,10 +139,10 @@ namespace _2D_Graphics
 
         public void addEllipsePts(int x, int y)
         {
-            shapePts.Add(new Point(center.X + x, center.Y + y));
-            shapePts.Add(new Point(center.X - x, center.Y + y));
-            shapePts.Add(new Point(center.X + x, center.Y - y));
-            shapePts.Add(new Point(center.X - x, center.Y - y));
+            this.shapePts.Add(new Point(center.X + x, center.Y + y));
+            this.shapePts.Add(new Point(center.X - x, center.Y + y));
+            this.shapePts.Add(new Point(center.X + x, center.Y - y));
+            this.shapePts.Add(new Point(center.X - x, center.Y - y));
         }
 
         public override void showShape(OpenGL gl)
@@ -149,7 +154,7 @@ namespace _2D_Graphics
         public override void editShape(List<Point> vertices, List<Point> pts, List<Point> ctrlPts, float thick, Color shapeColor, Color fillColor, bool isFilling)
         {
             base.editShape(vertices, pts, ctrlPts, thick, shapeColor, fillColor, isFilling);
-            this.shapePts = new List<Point>(shapePts);
+            this.shapePts = new List<Point>(pts);
         }
 
         public override void showEditShape(OpenGL gl)
@@ -224,7 +229,10 @@ namespace _2D_Graphics
 
         public override Point getCenter()
         {
-            return vertices[0];
+            //return vertices[0];
+            int dx = vertices[2].X - vertices[1].X;
+            int dy = vertices[2].Y - vertices[1].Y;
+            return new Point(vertices[1].X + dx / 2, vertices[1].Y + dy / 2);
         }
 
         public override ShapeType getShapeType()

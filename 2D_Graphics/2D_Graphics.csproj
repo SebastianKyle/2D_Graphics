@@ -75,9 +75,11 @@
     <Compile Include="shapes\Pentagon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="shapes\Polygon.cs" />
     <Compile Include="shapes\Rectangle.cs" />
     <Compile Include="shapes\Shape.cs" />
     <Compile Include="shapes\Triangle.cs" />
+    <Compile Include="transformations\Transformer.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -133,7 +135,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="fillers\" />
-    <Folder Include="transformations\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RotateIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

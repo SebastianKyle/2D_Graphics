@@ -244,8 +244,9 @@ namespace _2D_Graphics
 
                 if (painter.isTranslate)
                 {
-                    //painter.transformer = new Transformer(current.X - painter.oldPos.X, current.Y - painter.oldPos.Y);
-                    //painter.handleTranslate();
+                    painter.transformer = new transformations.Transformer();
+                    painter.transformer.translate(current.X - painter.oldPos.X, current.Y - painter.oldPos.Y);
+                    painter.handleTranslate();
                 }
                 else if (painter.isScale)
                 {
@@ -374,7 +375,7 @@ namespace _2D_Graphics
                 {
                     if (painter.isDrawing)
                     {
-                        if (painter.nVertices > 1)
+                        if (painter.nVertices > 1) // It's a polygon
                         {
                             painter.isDrawing = false;
                             painter.isEditing = true;
@@ -411,7 +412,7 @@ namespace _2D_Graphics
         private void btnCircle_Click(object sender, EventArgs e)
         {
             painter.turnOffActiveMode();
-            painter.shapeType = ShapeType.Ellipse; // Initial set as Ellipse, change to Circle when Shift pressed
+            painter.shapeType = ShapeType.Ellipse; // Initially set as Ellipse, change to Circle when Shift pressed
         }
 
         private void btnRectangle_Click(object sender, EventArgs e)
@@ -442,6 +443,21 @@ namespace _2D_Graphics
             }
 
             painter.isSelect = true;
+        }
+
+        private void btnRotate_Click(object sender, EventArgs e)
+        {
+            painter.isRotate = true;
+        }
+
+        private void btnUndo_Click(object sender, EventArgs e)
+        {
+            painter.isUndo = true;
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            painter.isClear = true;
         }
     }
 }
