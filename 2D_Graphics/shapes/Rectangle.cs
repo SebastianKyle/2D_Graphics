@@ -1,4 +1,5 @@
-﻿using SharpGL;
+﻿using _2D_Graphics.fillers;
+using SharpGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -102,7 +103,7 @@ namespace _2D_Graphics
         {
             if (this.isFilling)
             {
-                //fill.ScanFill(vertices, fillColor, gl);
+                Filler.scanFill(vertices, fillColor, gl);
             }
         }
 

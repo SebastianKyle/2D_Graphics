@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="fillers\Filler.cs" />
     <Compile Include="shapes\Circle.cs" />
     <Compile Include="shapes\Ellipse.cs" />
     <Compile Include="Form1.cs">
@@ -133,11 +134,15 @@
   <ItemGroup>
     <None Include="Resources\TriangleIcon.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="fillers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\RotateIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FillIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NoFillIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

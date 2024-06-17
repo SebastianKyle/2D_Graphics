@@ -39,10 +39,22 @@
             this.btnTriangle = new System.Windows.Forms.Button();
             this.btnLine = new System.Windows.Forms.Button();
             this.btnSelect = new System.Windows.Forms.Button();
-            this.btnRotate = new System.Windows.Forms.Button();
             this.btnUndo = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
+            this.btnRotate = new System.Windows.Forms.Button();
+            this.btnFill = new System.Windows.Forms.Button();
+            this.btnFillColor = new System.Windows.Forms.Button();
+            this.btnPaintColor = new System.Windows.Forms.Button();
+            this.pbFillColor = new System.Windows.Forms.PictureBox();
+            this.pbPaintColor = new System.Windows.Forms.PictureBox();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.colorDialog2 = new System.Windows.Forms.ColorDialog();
+            this.cbxThickness = new System.Windows.Forms.ComboBox();
+            this.lblThick = new System.Windows.Forms.Label();
+            this.txtDrawTime = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.openGLControl1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFillColor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbPaintColor)).BeginInit();
             this.SuspendLayout();
             // 
             // openGLControl1
@@ -160,17 +172,6 @@
             this.btnSelect.UseVisualStyleBackColor = true;
             this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
             // 
-            // btnRotate
-            // 
-            this.btnRotate.BackgroundImage = global::_2D_Graphics.Properties.Resources.RotateIcon;
-            this.btnRotate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnRotate.Location = new System.Drawing.Point(240, 12);
-            this.btnRotate.Name = "btnRotate";
-            this.btnRotate.Size = new System.Drawing.Size(65, 55);
-            this.btnRotate.TabIndex = 9;
-            this.btnRotate.UseVisualStyleBackColor = true;
-            this.btnRotate.Click += new System.EventHandler(this.btnRotate_Click);
-            // 
             // btnUndo
             // 
             this.btnUndo.Location = new System.Drawing.Point(99, 12);
@@ -191,11 +192,124 @@
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
+            // btnRotate
+            // 
+            this.btnRotate.BackgroundImage = global::_2D_Graphics.Properties.Resources.RotateIcon;
+            this.btnRotate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnRotate.Location = new System.Drawing.Point(240, 12);
+            this.btnRotate.Name = "btnRotate";
+            this.btnRotate.Size = new System.Drawing.Size(65, 55);
+            this.btnRotate.TabIndex = 9;
+            this.btnRotate.UseVisualStyleBackColor = true;
+            this.btnRotate.Click += new System.EventHandler(this.btnRotate_Click);
+            // 
+            // btnFill
+            // 
+            this.btnFill.BackgroundImage = global::_2D_Graphics.Properties.Resources.FillIcon;
+            this.btnFill.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnFill.Location = new System.Drawing.Point(647, 12);
+            this.btnFill.Name = "btnFill";
+            this.btnFill.Size = new System.Drawing.Size(65, 55);
+            this.btnFill.TabIndex = 12;
+            this.btnFill.UseVisualStyleBackColor = true;
+            this.btnFill.Click += new System.EventHandler(this.btnFill_Click);
+            // 
+            // btnFillColor
+            // 
+            this.btnFillColor.Location = new System.Drawing.Point(733, 12);
+            this.btnFillColor.Name = "btnFillColor";
+            this.btnFillColor.Size = new System.Drawing.Size(82, 25);
+            this.btnFillColor.TabIndex = 13;
+            this.btnFillColor.Text = "Fill Color";
+            this.btnFillColor.UseVisualStyleBackColor = true;
+            this.btnFillColor.Click += new System.EventHandler(this.btnFillColor_Click);
+            // 
+            // btnPaintColor
+            // 
+            this.btnPaintColor.Location = new System.Drawing.Point(733, 42);
+            this.btnPaintColor.Name = "btnPaintColor";
+            this.btnPaintColor.Size = new System.Drawing.Size(82, 25);
+            this.btnPaintColor.TabIndex = 14;
+            this.btnPaintColor.Text = "Paint Color";
+            this.btnPaintColor.UseVisualStyleBackColor = true;
+            this.btnPaintColor.Click += new System.EventHandler(this.btnPaintColor_Click);
+            // 
+            // pbFillColor
+            // 
+            this.pbFillColor.Location = new System.Drawing.Point(833, 12);
+            this.pbFillColor.Name = "pbFillColor";
+            this.pbFillColor.Size = new System.Drawing.Size(25, 25);
+            this.pbFillColor.TabIndex = 15;
+            this.pbFillColor.TabStop = false;
+            // 
+            // pbPaintColor
+            // 
+            this.pbPaintColor.Location = new System.Drawing.Point(833, 42);
+            this.pbPaintColor.Name = "pbPaintColor";
+            this.pbPaintColor.Size = new System.Drawing.Size(25, 25);
+            this.pbPaintColor.TabIndex = 16;
+            this.pbPaintColor.TabStop = false;
+            // 
+            // colorDialog1
+            // 
+            this.colorDialog1.Color = System.Drawing.Color.LightBlue;
+            // 
+            // colorDialog2
+            // 
+            this.colorDialog2.Color = System.Drawing.Color.White;
+            // 
+            // cbxThickness
+            // 
+            this.cbxThickness.FormattingEnabled = true;
+            this.cbxThickness.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"});
+            this.cbxThickness.Location = new System.Drawing.Point(733, 79);
+            this.cbxThickness.Name = "cbxThickness";
+            this.cbxThickness.Size = new System.Drawing.Size(82, 24);
+            this.cbxThickness.TabIndex = 17;
+            this.cbxThickness.Text = "1";
+            this.cbxThickness.SelectedIndexChanged += new System.EventHandler(this.cbxThickness_SelectedIndexChanged);
+            // 
+            // lblThick
+            // 
+            this.lblThick.AutoSize = true;
+            this.lblThick.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblThick.Location = new System.Drawing.Point(656, 79);
+            this.lblThick.Name = "lblThick";
+            this.lblThick.Size = new System.Drawing.Size(56, 24);
+            this.lblThick.TabIndex = 18;
+            this.lblThick.Text = "Thick";
+            // 
+            // txtDrawTime
+            // 
+            this.txtDrawTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDrawTime.Location = new System.Drawing.Point(647, 109);
+            this.txtDrawTime.Name = "txtDrawTime";
+            this.txtDrawTime.Size = new System.Drawing.Size(211, 26);
+            this.txtDrawTime.TabIndex = 19;
+            // 
             // Graphics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1499, 835);
+            this.Controls.Add(this.txtDrawTime);
+            this.Controls.Add(this.lblThick);
+            this.Controls.Add(this.cbxThickness);
+            this.Controls.Add(this.pbPaintColor);
+            this.Controls.Add(this.pbFillColor);
+            this.Controls.Add(this.btnPaintColor);
+            this.Controls.Add(this.btnFillColor);
+            this.Controls.Add(this.btnFill);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnUndo);
             this.Controls.Add(this.btnRotate);
@@ -209,9 +323,12 @@
             this.Controls.Add(this.btnSelect);
             this.Controls.Add(this.openGLControl1);
             this.Name = "Graphics";
-            this.Text = "Graphics";
+            this.Text = "2D Graphics";
             ((System.ComponentModel.ISupportInitialize)(this.openGLControl1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFillColor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbPaintColor)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -230,5 +347,15 @@
         private System.Windows.Forms.Button btnRotate;
         private System.Windows.Forms.Button btnUndo;
         private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Button btnFill;
+        private System.Windows.Forms.Button btnFillColor;
+        private System.Windows.Forms.Button btnPaintColor;
+        private System.Windows.Forms.PictureBox pbFillColor;
+        private System.Windows.Forms.PictureBox pbPaintColor;
+        private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.ColorDialog colorDialog2;
+        private System.Windows.Forms.ComboBox cbxThickness;
+        private System.Windows.Forms.Label lblThick;
+        private System.Windows.Forms.TextBox txtDrawTime;
     }
 }

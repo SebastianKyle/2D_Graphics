@@ -121,11 +121,17 @@
   <data name="CircleIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CircleIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="FillIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FillIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="HexagonIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HexagonIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="LineIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\LineIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NoFillIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NoFillIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="PentagonIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PentagonIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

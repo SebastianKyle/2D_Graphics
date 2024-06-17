@@ -73,6 +73,16 @@ namespace _2D_Graphics.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap FillIcon {
+            get {
+                object obj = ResourceManager.GetObject("FillIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap HexagonIcon {
             get {
                 object obj = ResourceManager.GetObject("HexagonIcon", resourceCulture);
@@ -86,6 +96,16 @@ namespace _2D_Graphics.Properties {
         internal static System.Drawing.Bitmap LineIcon {
             get {
                 object obj = ResourceManager.GetObject("LineIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap NoFillIcon {
+            get {
+                object obj = ResourceManager.GetObject("NoFillIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

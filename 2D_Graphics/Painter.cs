@@ -186,7 +186,7 @@ namespace _2D_Graphics
                 curShape = new Ellipse(vertices, pStart, pEnd, thick, paintColor, fillColor, isFilling, isRegular);
             }
             else if (shapeType == ShapeType.Triangle)
-            {  
+            {
                 curShape = new Triangle(vertices, pStart, pEnd, thick, paintColor, fillColor, isFilling, isRegular);
             }
             else if (shapeType == ShapeType.Rectangle)
@@ -380,7 +380,6 @@ namespace _2D_Graphics
                 Shape tempElip = new Ellipse(null, tmpVertices[1], tmpVertices[2], thick, paintColor, fillColor, isFilling, isRegular);
                 List<Point> tmpPts = tempElip.getPoints();
 
-                curShape.setCtrlPts();
                 List<Point> tmpCtrlPts = tempElip.getCtrlPoints();
 
                 transformer.setMatCompositeToIdentity();
@@ -388,7 +387,7 @@ namespace _2D_Graphics
                 verticesTransformed = transformer.transformVerts(tmpVertices, tmpVertices.Count);
                 ptsTransformed = transformer.transformVerts(tmpPts, tmpPts.Count);
                 ctrlPtsTransformed = transformer.transformVerts(tmpCtrlPts, tmpCtrlPts.Count);
-            } 
+            }
             else if (shapeType == ShapeType.Rectangle)
             {
                 Transformer tmpTrans = new Transformer();
@@ -424,17 +423,17 @@ namespace _2D_Graphics
             else
             {
                 verticesTransformed = transformer.transformVerts(vertices, vertices.Count);
-                ctrlPtsTransformed = transformer.transformVerts(ctrlPts, ctrlPts.Count); 
+                ctrlPtsTransformed = transformer.transformVerts(ctrlPts, ctrlPts.Count);
 
             }
         }
 
         public void handleRotate(Point cur)
         {
-            Point vcc = new Point(cur.X - center.X, cur.Y - center.Y);  // Vector cur-center
+            Point vcc = new Point(cur.X - curShape.getCenter().X, cur.Y - curShape.getCenter().Y);  // Vector cur-center
             double lenVcc = Math.Sqrt(vcc.X * vcc.X + vcc.Y * vcc.Y);   // vcc norm
 
-            Point voc = new Point(oldPos.X - center.X, oldPos.Y - center.Y);    // Vector old-center
+            Point voc = new Point(oldPos.X - curShape.getCenter().X, oldPos.Y - curShape.getCenter().Y);    // Vector old-center
             double lenVoc = Math.Sqrt(voc.X * voc.X + voc.Y * voc.Y);           // voc norm
 
             angle = Math.Acos((vcc.X * voc.X + vcc.Y * voc.Y) / (lenVcc * lenVoc));
@@ -444,7 +443,7 @@ namespace _2D_Graphics
             }
 
             transformer = new Transformer();
-            transformer.rotate(center, angle);
+            transformer.rotate(curShape.getCenter(), angle);
             verticesTransformed = transformer.transformVerts(vertices, vertices.Count);
             if (shapeType == ShapeType.Ellipse)
             {
@@ -459,6 +458,11 @@ namespace _2D_Graphics
             ctrlPts = ctrlPtsTransformed;
             pts = ptsTransformed;
             center = centerTransformed;
+
+            curShape.setVertices(verticesTransformed);
+            curShape.ctrlPts = ctrlPtsTransformed;
+            //curShape.pts = ptsTransformed;
+            //curShape.center = centerTransformed;
 
             if (isRotate)
             {

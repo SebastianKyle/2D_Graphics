@@ -20,6 +20,9 @@ namespace _2D_Graphics
             InitializeComponent();
 
             painter = new Painter();
+
+            pbFillColor.BackColor = painter.fillColor;
+            pbPaintColor.BackColor = painter.paintColor;
         }
 
         private void openGLControl1_OpenGLInitialized(object sender, EventArgs e)
@@ -34,29 +37,6 @@ namespace _2D_Graphics
         private void openGLControl1_OpenGLDraw(object sender, RenderEventArgs args)
         {
             OpenGL gl = openGLControl1.OpenGL;
-
-            //gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
-
-            //gl.LoadIdentity();
-
-            //gl.MatrixMode(OpenGL.GL_PROJECTION);
-            //gl.LoadIdentity();
-            //gl.Ortho2D(0, openGLControl1.Width, openGLControl1.Height, 0);
-
-            //gl.MatrixMode(OpenGL.GL_MODELVIEW);
-            //gl.LoadIdentity();
-
-            //gl.Color(1.0f, 0.0f, 0.0f);
-
-            //gl.Begin(OpenGL.GL_POLYGON);
-
-            //gl.Vertex(openGLControl1.Width / 2, openGLControl1.Height / 4); // Top vertex
-            //gl.Vertex(openGLControl1.Width / 4, 3 * openGLControl1.Height / 4); // Bottom-left vertex
-            //gl.Vertex(3 * openGLControl1.Width / 4, 3 * openGLControl1.Height / 4);
-
-            //gl.End();
-
-            //gl.Flush();
 
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
 
@@ -90,21 +70,25 @@ namespace _2D_Graphics
                 painter.finishTransform();
                 painter.isScale = false;
             }
+
             if (painter.isRotate && painter.isDown)
             {
                 painter.finishTransform();
                 painter.isDown = false;
                 painter.isRotate = false;
             }
+
             if (painter.isSinglePtMove)
             {
                 painter.finishTransform();
                 painter.isSinglePtMove = false;
             }
+
             if (painter.shapeType != ShapeType.Polygon)
             {
                 String DrawingTime = String.Format("{0:0.000}", painter.timeSpan);
-                //tb_Timer.Text = "Drawing time: " + DrawingTime + " ms";
+                txtDrawTime.Text = "Draw time: " + DrawingTime + " ms";
+
                 if (painter.isDrawing)
                 {
                     painter.isDrawing = false;
@@ -121,6 +105,7 @@ namespace _2D_Graphics
                 bool flagOut = true;
                 Point current = e.Location;
                 int maxIndex = painter.shapes.Count - 1;
+
                 for (int i = maxIndex; i > -1; i--)
                 {
                     if (painter.shapes[i].isInShape(current) || painter.shapes[i].isOnShape(current))
@@ -443,6 +428,8 @@ namespace _2D_Graphics
             }
 
             painter.isSelect = true;
+            painter.fillColor = colorDialog1.Color;
+            painter.paintColor = colorDialog2.Color;
         }
 
         private void btnRotate_Click(object sender, EventArgs e)
@@ -458,6 +445,45 @@ namespace _2D_Graphics
         private void btnClear_Click(object sender, EventArgs e)
         {
             painter.isClear = true;
+        }
+
+        private void btnFill_Click(object sender, EventArgs e)
+        {
+            if (painter.isFilling)
+            {
+                painter.isFilling = false;
+                btnFill.BackgroundImage = Properties.Resources.NoFillIcon;
+            }
+            else
+            {
+                painter.isFilling = true;
+                painter.fillColor = colorDialog1.Color;
+                btnFill.BackgroundImage = Properties.Resources.FillIcon;
+            }
+        }
+
+        private void btnFillColor_Click(object sender, EventArgs e)
+        {
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                painter.fillColor = colorDialog1.Color;
+                pbFillColor.BackColor = painter.fillColor;
+            }
+        }
+
+        private void btnPaintColor_Click(object sender, EventArgs e)
+        {
+            if (colorDialog2.ShowDialog() == DialogResult.OK)
+            {
+                painter.paintColor = colorDialog2.Color;
+                pbPaintColor.BackColor = painter.paintColor;
+            }
+        }
+
+        private void cbxThickness_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int thickness = int.Parse(cbxThickness.Text);
+            painter.thick = thickness;
         }
     }
 }
