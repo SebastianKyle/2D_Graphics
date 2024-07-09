@@ -5,6 +5,22 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2D_Graphics", "2D_Graphics\2D_Graphics.csproj", "{20ED6976-0B65-428F-83AA-DF6FC7C51F9B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A636D7D8-F9BC-44E2-B0BC-961D987082BF}"
+	ProjectSection(SolutionItems) = preProject
+		demos\click_shape_buttons.mp4 = demos\click_shape_buttons.mp4
+		demos\draw_time.png = demos\draw_time.png
+		demos\fill_color.mp4 = demos\fill_color.mp4
+		demos\paint_color.mp4 = demos\paint_color.mp4
+		demos\Polygon.mp4 = demos\Polygon.mp4
+		Readme.md = Readme.md
+		demos\rotate_shape.mp4 = demos\rotate_shape.mp4
+		demos\scale_shape.mp4 = demos\scale_shape.mp4
+		demos\select_shape_translate.mp4 = demos\select_shape_translate.mp4
+		demos\shift_key.mp4 = demos\shift_key.mp4
+		demos\thickness.mp4 = demos\thickness.mp4
+		demos\undo_clear.mp4 = demos\undo_clear.mp4
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

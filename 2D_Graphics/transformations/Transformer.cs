@@ -121,8 +121,7 @@ namespace _2D_Graphics.transformations
                     + matComposite[1][1] * verts[k].Y
                     + matComposite[1][2];
 
-                //verts[k] = new Point(Convert.ToInt32(tempX), Convert.ToInt32(tempY);
-                result.Add(new Point(Convert.ToInt32(tempX), Convert.ToInt32(tempY)));
+                result.Add(new Point((int)Math.Round(tempX), (int)Math.Round(tempY)));
             }
 
             return result;
