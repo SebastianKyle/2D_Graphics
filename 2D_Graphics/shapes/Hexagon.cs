@@ -14,7 +14,7 @@ namespace _2D_Graphics
     {
         Point top, upperRight, lowerRight, bot, lowerLeft, upperLeft;
 
-        public Hexagon(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, bool isFilling) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling)
+        public Hexagon(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, bool isFilling, Boolean copy = false) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling, copy)
         {
             int dy = pEnd.Y - pStart.Y;
             int dx = pEnd.X - pStart.X;
@@ -61,6 +61,17 @@ namespace _2D_Graphics
             bot = this.vertices[3];
             lowerLeft = this.vertices[4];
             upperLeft = this.vertices[5];
+
+            if (copy)
+            {
+                this.vertices = new List<Point>(vertices);
+                top = this.vertices[0];
+                upperRight = this.vertices[1];
+                lowerRight = this.vertices[2];
+                bot = this.vertices[3];
+                lowerLeft = this.vertices[4];
+                upperLeft = this.vertices[5];
+            }
 
             setCtrlPts();
         }
@@ -135,6 +146,11 @@ namespace _2D_Graphics
         public override ShapeType getShapeType()
         {
             return ShapeType.Hexagon;
+        }
+
+        public override Shape Clone() {
+            // Create a deep copy of the shape
+            return new Hexagon(new List<Point>(vertices), pStart, pEnd, thick, shapeColor, fillColor, isFilling, copy: true);
         }
     }
 }

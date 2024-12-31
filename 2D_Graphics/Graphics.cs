@@ -1,4 +1,5 @@
-﻿using SharpGL;
+﻿using Microsoft.Build.Framework;
+using SharpGL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +15,7 @@ namespace _2D_Graphics
     public partial class Graphics : Form
     {
         Painter painter;
-
+        
         public Graphics()
         {
             InitializeComponent();
@@ -231,6 +232,17 @@ namespace _2D_Graphics
                 {
                     painter.transformer = new transformations.Transformer();
                     painter.transformer.translate(current.X - painter.oldPos.X, current.Y - painter.oldPos.Y);
+
+                    if (painter.isFractalMode)
+                    {
+                        if (painter.ifsTransformations.Count > 0)
+                        {
+                            painter.ifsTransformations[painter.ifsTransformations.Count - 1][0] = new transformations.Transformer();
+                            painter.ifsTransformations[painter.ifsTransformations.Count - 1][0].translate(10, 10);
+                            painter.ifsTransformations[painter.ifsTransformations.Count - 1][0].translate(current.X - painter.oldPos.X, current.Y - painter.oldPos.Y);
+                        }
+                    }
+
                     painter.handleTranslate();
                 }
                 else if (painter.isScale)
@@ -484,6 +496,28 @@ namespace _2D_Graphics
         {
             int thickness = int.Parse(cbxThickness.Text);
             painter.thick = thickness;
+        }
+
+        private void btn_StartFractal_Click(object sender, EventArgs e)
+        {
+            painter.clearCanvas();
+            painter.isFractalMode = !painter.isFractalMode;
+            painter.initialFractalShape = null;
+            painter.ifsTransformations.Clear();
+        }
+
+        private void btn_AddTransformation_Click(object sender, EventArgs e)
+        {
+            OpenGL gl = openGLControl1.OpenGL;
+            painter.addCopyShapeAndTransformer(gl); 
+        }
+
+        private void btn_DrawFractal_Click(object sender, EventArgs e)
+        {
+            OpenGL gl = openGLControl1.OpenGL;
+
+            //gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
+            painter.drawFractal(gl);
         }
     }
 }

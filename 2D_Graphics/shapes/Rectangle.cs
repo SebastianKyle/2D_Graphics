@@ -13,8 +13,8 @@ namespace _2D_Graphics
     {
         Point vertex2, vertex3, vertex4;
 
-        public Rectangle(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, Boolean isFilling, Boolean isRegular = false)
-            : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling)
+        public Rectangle(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, Boolean isFilling, Boolean isRegular = false, Boolean copy=false)
+            : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling, copy)
         {
             if (isRegular)
             {
@@ -25,11 +25,22 @@ namespace _2D_Graphics
                 setToNormalShape();
             }
 
-            this.vertices = new List<Point>();
-            this.vertices.Add(pStart);
-            this.vertices.Add(vertex2);
-            this.vertices.Add(vertex3);
-            this.vertices.Add(vertex4);
+            if (copy)
+            {
+                this.vertices = new List<Point>(vertices);
+                pStart = this.vertices[0];
+                vertex2 = this.vertices[1];
+                vertex3 = this.vertices[2];
+                vertex4 = this.vertices[3];
+            }
+            else
+            {
+                this.vertices = new List<Point>();
+                this.vertices.Add(pStart);
+                this.vertices.Add(vertex2);
+                this.vertices.Add(vertex3);
+                this.vertices.Add(vertex4);
+            }
 
             setCtrlPts();
         }
@@ -138,6 +149,11 @@ namespace _2D_Graphics
         public override ShapeType getShapeType()
         {
             return ShapeType.Rectangle;
+        }
+
+        public override Shape Clone() {
+            // Create a deep copy of the shape
+            return new Rectangle(new List<Point>(vertices), pStart, pEnd, thick, shapeColor, fillColor, isFilling, isRegular, copy: true);
         }
  
     }

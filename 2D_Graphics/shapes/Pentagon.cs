@@ -13,7 +13,7 @@ namespace _2D_Graphics
     {
         Point top, right, rightBot, leftBot, left;
 
-        public Pentagon(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, bool isFilling) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling)
+        public Pentagon(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, bool isFilling, Boolean copy = false) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling, copy: copy)
         {
             int dy = pEnd.Y - pStart.Y;
             int dx = pEnd.X - pStart.X;
@@ -46,13 +46,21 @@ namespace _2D_Graphics
 
             double angleOffSet = -Math.PI / 2;
 
-            this.vertices = new List<Point>();
-            for (int i = 0; i < 5; i++)
+            if (!copy)
             {
-                double angle = angleOffSet + i * 2 * Math.PI / 5;
-                int x = (int)(center.X + radius * Math.Cos(angle));
-                int y = (int)(center.Y + radius * Math.Sin(angle));
-                this.vertices.Add(new Point(x, y));
+                this.vertices = new List<Point>();
+                for (int i = 0; i < 5; i++)
+                {
+                    double angle = angleOffSet + i * 2 * Math.PI / 5;
+                    int x = (int)(center.X + radius * Math.Cos(angle));
+                    int y = (int)(center.Y + radius * Math.Sin(angle));
+                    this.vertices.Add(new Point(x, y));
+                }
+
+            }
+            else
+            {
+                this.vertices = new List<Point>(vertices);
             }
 
             top = this.vertices[0];
@@ -142,6 +150,11 @@ namespace _2D_Graphics
         public override ShapeType getShapeType()
         {
             return ShapeType.Pentagon;
+        }
+
+        public override Shape Clone() {
+            // Create a deep copy of the shape
+            return new Pentagon(new List<Point>(vertices), pStart, pEnd, thick, shapeColor, fillColor, isFilling, copy: true);
         }
 
     }

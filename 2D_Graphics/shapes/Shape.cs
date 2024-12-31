@@ -1,4 +1,5 @@
-﻿using SharpGL;
+﻿using _2D_Graphics.transformations;
+using SharpGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -29,6 +30,7 @@ namespace _2D_Graphics
         protected Color shapeColor;
         protected Color fillColor;
         protected bool isFilling;
+        protected bool isRegular;
         protected List<Point> shapePts;
         public List<Point> ctrlPts;
 
@@ -37,7 +39,7 @@ namespace _2D_Graphics
         protected Boolean preserveRatio;
         public double angleRotated;
 
-        public Shape(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, Boolean isFilling, Boolean isRegular = false)
+        public Shape(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, Boolean isFilling, Boolean isRegular = false, Boolean copy = false)
         {
             preserveRatio = false;
             pStart = Start;
@@ -46,9 +48,15 @@ namespace _2D_Graphics
             this.shapeColor = shapeColor;
             this.fillColor = fillColor;
             this.isFilling = isFilling;
+            this.isRegular = isRegular;
             //fill = new Fill();
             shapePts = new List<Point>();
             angleRotated = 0;
+
+            if (copy)
+            {
+                this.vertices = new List<Point>(vertices);
+            }
         }
 
         public virtual void calculateShapePts() { }
@@ -320,6 +328,11 @@ namespace _2D_Graphics
         public virtual ShapeType getShapeType()
         {
             return 0;
+        }
+
+        public virtual Shape Clone() {
+            // Create a deep copy of the shape
+            return new Shape(new List<Point>(vertices), pStart, pEnd, thick, shapeColor, fillColor, isFilling, isRegular, copy: true);
         }
 
     }

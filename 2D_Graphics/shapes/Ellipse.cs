@@ -13,7 +13,7 @@ namespace _2D_Graphics
         protected int rx, ry;
         protected Point center;
 
-        public Ellipse(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, bool isFilling, Boolean isRegular = false) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling)
+        public Ellipse(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, bool isFilling, Boolean isRegular = false, Boolean copy = false) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling, copy)
         {
             if (isRegular) // To circle shape
             {
@@ -28,6 +28,14 @@ namespace _2D_Graphics
             this.vertices.Add(this.center);
             this.vertices.Add(pStart);
             this.vertices.Add(pEnd);
+
+            if (copy)
+            {
+                this.vertices = new List<Point>(vertices);
+                this.center = this.vertices[0];
+                this.pStart = this.vertices[1];
+                this.pEnd = this.vertices[2];
+            }
 
             calculateShapePts();
 
@@ -238,6 +246,11 @@ namespace _2D_Graphics
         public override ShapeType getShapeType()
         {
             return ShapeType.Ellipse;
+        }
+
+        public override Shape Clone() {
+            // Create a deep copy of the shape
+            return new Ellipse(new List<Point>(vertices), pStart, pEnd, thick, shapeColor, fillColor, isFilling, isRegular);
         }
 
     }

@@ -70,6 +70,12 @@ namespace _2D_Graphics
 
         public bool isRegular;
 
+        // Fractal fields
+        public List<List<Transformer>> ifsTransformations;
+        public bool isFractalMode;
+        public int fractalIterations;
+        public Shape initialFractalShape;
+
         public Painter()
         {
             paintColor = Color.White;
@@ -108,6 +114,11 @@ namespace _2D_Graphics
             isSinglePtMove = false;
 
             isRegular = false;
+
+            ifsTransformations = new List<List<Transformer>>();
+            isFractalMode = false;
+            fractalIterations = 5;
+            initialFractalShape = null;
         }
 
         public void showShapes(OpenGL gl)
@@ -231,6 +242,12 @@ namespace _2D_Graphics
             if (indexEdit == -1)
             {
                 shapes.Add(curShape);
+
+                if (isFractalMode && initialFractalShape == null)
+                {
+                    initialFractalShape = curShape;
+                }
+
                 curShape = null;
             }
             else indexEdit = -1;
@@ -370,12 +387,18 @@ namespace _2D_Graphics
             transformer = new Transformer();
             transformer.scale(fixedPt, sx, sy);
 
+            double[][] scaleCompositeMat = transformer.getMatComposite();
             if (shapeType == ShapeType.Ellipse)
             {
                 Transformer tmpTrans = new Transformer();
                 tmpTrans.rotate(center, -curShape.angleRotated);
+
+                scaleCompositeMat = tmpTrans.getMatComposite();
+
                 List<Point> tmpVertices = tmpTrans.transformVerts(vertices, vertices.Count);    // Rotate to original orientation
                 tmpVertices = transformer.transformVerts(tmpVertices, tmpVertices.Count);       // Scale
+
+                transformer.matrix3x3PreMultiply(transformer.getMatComposite(), ref scaleCompositeMat);
 
                 Shape tempElip = new Ellipse(null, tmpVertices[1], tmpVertices[2], thick, paintColor, fillColor, isFilling, isRegular);
                 List<Point> tmpPts = tempElip.getPoints();
@@ -384,6 +407,8 @@ namespace _2D_Graphics
 
                 transformer.setMatCompositeToIdentity();
                 transformer.rotate(center, curShape.angleRotated);      // Rotate back to current orientation
+                transformer.matrix3x3PreMultiply(transformer.getMatComposite(), ref scaleCompositeMat);
+
                 verticesTransformed = transformer.transformVerts(tmpVertices, tmpVertices.Count);
                 ptsTransformed = transformer.transformVerts(tmpPts, tmpPts.Count);
                 ctrlPtsTransformed = transformer.transformVerts(tmpCtrlPts, tmpCtrlPts.Count);
@@ -392,8 +417,13 @@ namespace _2D_Graphics
             {
                 Transformer tmpTrans = new Transformer();
                 tmpTrans.rotate(center, -curShape.angleRotated);
+
+                scaleCompositeMat = tmpTrans.getMatComposite();
+
                 List<Point> tmpVertices = tmpTrans.transformVerts(vertices, vertices.Count);
                 tmpVertices = transformer.transformVerts(tmpVertices, tmpVertices.Count);
+
+                transformer.matrix3x3PreMultiply(transformer.getMatComposite(), ref scaleCompositeMat);
 
                 Shape tmpRec = new Rectangle(null, tmpVertices[0], tmpVertices[2], thick, paintColor, fillColor, isFilling, isRegular);
 
@@ -401,6 +431,8 @@ namespace _2D_Graphics
 
                 transformer.setMatCompositeToIdentity();
                 transformer.rotate(center, curShape.angleRotated);
+                transformer.matrix3x3PreMultiply(transformer.getMatComposite(), ref scaleCompositeMat); 
+
                 verticesTransformed = transformer.transformVerts(tmpVertices, tmpVertices.Count);
                 ctrlPtsTransformed = transformer.transformVerts(tmpCtrlPts, tmpCtrlPts.Count);
             }
@@ -408,8 +440,12 @@ namespace _2D_Graphics
             {
                 Transformer tmpTrans = new Transformer();
                 tmpTrans.rotate(center, -curShape.angleRotated);
+
+                scaleCompositeMat = tmpTrans.getMatComposite();
+
                 List<Point> tmpVertices = tmpTrans.transformVerts(vertices, vertices.Count);
                 tmpVertices = transformer.transformVerts(tmpVertices, tmpVertices.Count);
+                transformer.matrix3x3PreMultiply(transformer.getMatComposite(), ref scaleCompositeMat);
 
                 Shape tmpTri = new Triangle(null, new Point(tmpVertices[1].X, tmpVertices[0].Y), tmpVertices[2], thick, paintColor, fillColor, isFilling, isRegular);
 
@@ -417,14 +453,30 @@ namespace _2D_Graphics
 
                 transformer.setMatCompositeToIdentity();
                 transformer.rotate(center, curShape.angleRotated);
+                transformer.matrix3x3PreMultiply(transformer.getMatComposite(), ref scaleCompositeMat);
+
                 verticesTransformed = transformer.transformVerts(tmpVertices, tmpVertices.Count);
                 ctrlPtsTransformed = transformer.transformVerts(tmpCtrlPts, tmpCtrlPts.Count);
             }
             else
             {
+
                 verticesTransformed = transformer.transformVerts(vertices, vertices.Count);
                 ctrlPtsTransformed = transformer.transformVerts(ctrlPts, ctrlPts.Count);
 
+            }
+
+            if (isFractalMode)
+            {
+                if (ifsTransformations.Count > 0)
+                {
+                    ifsTransformations[ifsTransformations.Count - 1][1] = new Transformer();
+                    ifsTransformations[ifsTransformations.Count - 1][1].setMatComposite(scaleCompositeMat);
+
+                    double[][] matComposite = ifsTransformations[ifsTransformations.Count - 1][1].getMatComposite();
+                    Console.WriteLine("Scale: " + matComposite[0][0] + " " + matComposite[0][1] + " " + matComposite[0][2]);
+                    Console.WriteLine("       " + matComposite[1][0] + " " + matComposite[1][1] + " " + matComposite[1][2]);
+                }
             }
         }
 
@@ -444,6 +496,16 @@ namespace _2D_Graphics
 
             transformer = new Transformer();
             transformer.rotate(curShape.getCenter(), angle);
+
+            if (isFractalMode)
+            {
+                if (ifsTransformations.Count > 0)
+                {
+                    ifsTransformations[ifsTransformations.Count - 1][2] = new Transformer();
+                    ifsTransformations[ifsTransformations.Count - 1][2].setMatComposite(transformer.getMatComposite());
+                }
+            }
+
             verticesTransformed = transformer.transformVerts(vertices, vertices.Count);
             if (shapeType == ShapeType.Ellipse)
             {
@@ -479,6 +541,93 @@ namespace _2D_Graphics
         public void setIsRegular(bool isRegular)
         {
             this.isRegular = isRegular;
+        }
+
+        public void clearCanvas()
+        {
+            shapes.Clear();
+            //ifsTransformations.Clear();
+            //isFractalMode = false;
+            curShape = null;
+            isDrawing = false;
+            doneDrawing = false;
+            isEditing = false;
+            isFree = true;
+        }
+
+        public void addCopyShapeAndTransformer(OpenGL gl)
+        {
+            Shape newShape = initialFractalShape.Clone();
+            getProperties(newShape);
+            shapes.Add(newShape);
+            curShape = newShape;
+
+            this.transformer = new Transformer();
+            this.transformer.translate(10, 10);
+            handleTranslate(); 
+            curShape.editShape(verticesTransformed, ptsTransformed, ctrlPtsTransformed, thick, paintColor, fillColor, isFilling);
+
+            curShape.showEditShape(gl);
+
+            Transformer transformer = new Transformer();
+            ifsTransformations.Add(new List<Transformer>() { new Transformer(), new Transformer(), new Transformer() });
+            transformer.translate(10, 10);
+            ifsTransformations[ifsTransformations.Count - 1][0] = transformer;
+        }
+
+        public void addTransformation(Transformer transformer)
+        {
+            if (isFractalMode)
+            {
+                //ifsTransformations.Add(transformer);
+            }
+        }
+
+        public void applyTransformations()
+        {
+            if (curShape != null && isFractalMode)
+            {
+                foreach (var transformerSet in ifsTransformations)
+                {
+                    foreach (var transformer in transformerSet) // translate, scale, rotate
+                    {
+                        verticesTransformed = transformer.transformVerts(verticesTransformed, verticesTransformed.Count);
+                        ctrlPtsTransformed = transformer.transformVerts(ctrlPtsTransformed, ctrlPtsTransformed.Count);
+                        ptsTransformed = transformer.transformVerts(ptsTransformed, ptsTransformed.Count);
+                        centerTransformed = transformer.transformPoint(centerTransformed);
+                    }
+                }
+            }
+        }
+
+        public void drawFractal(OpenGL gl)
+        {
+            if (ifsTransformations.Count == 0)
+            {
+                return;
+            }
+
+            clearCanvas();
+
+            shapes.Add(initialFractalShape);
+            curShape = initialFractalShape;
+            curShape.showEditShape(gl);
+
+            Console.WriteLine("IFS Transformations: " + ifsTransformations.Count);
+
+            for (int i = 0; i < fractalIterations; i++)
+            {
+                Shape newShape = shapes[shapes.Count - 1].Clone(); // Assuming Shape class has a Clone method
+                curShape = newShape;
+                shapes.Add(curShape);
+                getProperties(curShape);
+                applyTransformations();
+                curShape.editShape(verticesTransformed, ptsTransformed, ctrlPtsTransformed, thick, paintColor, fillColor, isFilling);
+                curShape.setVertices(verticesTransformed);
+                curShape.ctrlPts = ctrlPtsTransformed;
+                curShape.showShape(gl);
+                //curShape = newShape;
+            }
         }
 
     }

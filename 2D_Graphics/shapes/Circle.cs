@@ -13,7 +13,7 @@ namespace _2D_Graphics
         protected int radius;
         protected Point center;
 
-        public Circle(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, bool isFilling) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling)
+        public Circle(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, bool isFilling, Boolean copy = false) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling, copy)
         {
             int dy = pEnd.Y - pStart.Y;
             int dx = pEnd.X - pStart.X;
@@ -48,6 +48,15 @@ namespace _2D_Graphics
             vertices.Add(pStart);
             vertices.Add(pEnd);
 
+            if (copy)
+            {
+                this.vertices = new List<Point>(vertices);
+                radius = Math.Abs(this.vertices[0].X - this.vertices[1].X);
+                center = this.vertices[0];
+                pStart = this.vertices[1];
+                pEnd = this.vertices[2];
+            }
+
             calculateShapePts();
             setCtrlPts();
         }
@@ -55,6 +64,11 @@ namespace _2D_Graphics
         public override void calculateShapePts()
         {
             
+        }
+
+        public override Shape Clone() {
+            // Create a deep copy of the shape
+            return new Circle(new List<Point>(vertices), pStart, pEnd, thick, shapeColor, fillColor, isFilling, copy: true);
         }
     }
 }

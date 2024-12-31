@@ -13,7 +13,7 @@ namespace _2D_Graphics
     {
         Point topVertex, leftVertex, rightVertex;
 
-        public Triangle(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, bool isFilling, Boolean isRegular = false) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling)
+        public Triangle(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, bool isFilling, Boolean isRegular = false, Boolean copy = false) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling, copy)
         {
             if (isRegular)
             {
@@ -28,6 +28,14 @@ namespace _2D_Graphics
             this.vertices.Add(topVertex);
             this.vertices.Add(leftVertex);
             this.vertices.Add(rightVertex);
+
+            if (copy)
+            {
+                this.vertices = new List<Point>(vertices);
+                topVertex = this.vertices[0];
+                leftVertex = this.vertices[1];
+                rightVertex = this.vertices[2];
+            }
 
             setCtrlPts();
         }
@@ -185,6 +193,11 @@ namespace _2D_Graphics
         public override ShapeType getShapeType()
         {
             return ShapeType.Triangle;
+        }
+
+        public override Shape Clone() {
+            // Create a deep copy of the shape
+            return new Triangle(new List<Point>(vertices), pStart, pEnd, thick, shapeColor, fillColor, isFilling, isRegular, copy: true);
         }
     }
 }

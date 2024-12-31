@@ -52,6 +52,9 @@
             this.cbxThickness = new System.Windows.Forms.ComboBox();
             this.lblThick = new System.Windows.Forms.Label();
             this.txtDrawTime = new System.Windows.Forms.TextBox();
+            this.btn_StartFractal = new System.Windows.Forms.Button();
+            this.btn_AddTransformation = new System.Windows.Forms.Button();
+            this.btn_DrawFractal = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.openGLControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbFillColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPaintColor)).BeginInit();
@@ -297,11 +300,44 @@
             this.txtDrawTime.Size = new System.Drawing.Size(211, 26);
             this.txtDrawTime.TabIndex = 19;
             // 
+            // btn_StartFractal
+            // 
+            this.btn_StartFractal.Location = new System.Drawing.Point(928, 12);
+            this.btn_StartFractal.Name = "btn_StartFractal";
+            this.btn_StartFractal.Size = new System.Drawing.Size(145, 24);
+            this.btn_StartFractal.TabIndex = 20;
+            this.btn_StartFractal.Text = "Start Fractal";
+            this.btn_StartFractal.UseVisualStyleBackColor = true;
+            this.btn_StartFractal.Click += new System.EventHandler(this.btn_StartFractal_Click);
+            // 
+            // btn_AddTransformation
+            // 
+            this.btn_AddTransformation.Location = new System.Drawing.Point(928, 42);
+            this.btn_AddTransformation.Name = "btn_AddTransformation";
+            this.btn_AddTransformation.Size = new System.Drawing.Size(145, 24);
+            this.btn_AddTransformation.TabIndex = 21;
+            this.btn_AddTransformation.Text = "Add transformation";
+            this.btn_AddTransformation.UseVisualStyleBackColor = true;
+            this.btn_AddTransformation.Click += new System.EventHandler(this.btn_AddTransformation_Click);
+            // 
+            // btn_DrawFractal
+            // 
+            this.btn_DrawFractal.Location = new System.Drawing.Point(928, 72);
+            this.btn_DrawFractal.Name = "btn_DrawFractal";
+            this.btn_DrawFractal.Size = new System.Drawing.Size(145, 26);
+            this.btn_DrawFractal.TabIndex = 22;
+            this.btn_DrawFractal.Text = "Draw Fractal";
+            this.btn_DrawFractal.UseVisualStyleBackColor = true;
+            this.btn_DrawFractal.Click += new System.EventHandler(this.btn_DrawFractal_Click);
+            // 
             // Graphics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1499, 835);
+            this.Controls.Add(this.btn_DrawFractal);
+            this.Controls.Add(this.btn_AddTransformation);
+            this.Controls.Add(this.btn_StartFractal);
             this.Controls.Add(this.txtDrawTime);
             this.Controls.Add(this.lblThick);
             this.Controls.Add(this.cbxThickness);
@@ -357,5 +393,8 @@
         private System.Windows.Forms.ComboBox cbxThickness;
         private System.Windows.Forms.Label lblThick;
         private System.Windows.Forms.TextBox txtDrawTime;
+        private System.Windows.Forms.Button btn_StartFractal;
+        private System.Windows.Forms.Button btn_AddTransformation;
+        private System.Windows.Forms.Button btn_DrawFractal;
     }
 }

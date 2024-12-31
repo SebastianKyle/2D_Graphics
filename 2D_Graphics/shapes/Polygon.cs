@@ -11,7 +11,7 @@ namespace _2D_Graphics.shapes
 {
     internal class Polygon : Shape
     {
-        public Polygon(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, bool isFilling, bool isRegular = false) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling, isRegular)
+        public Polygon(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, bool isFilling, bool isRegular = false, Boolean copy = false) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling, isRegular, copy: copy)
         {
             preserveRatio = false;
             this.vertices = new List<Point>(vertices);
@@ -95,6 +95,11 @@ namespace _2D_Graphics.shapes
         public override ShapeType getShapeType()
         {
             return ShapeType.Polygon;
+        }
+
+        public override Shape Clone() {
+            // Create a deep copy of the shape
+            return new Polygon(new List<Point>(vertices), pStart, pEnd, thick, shapeColor, fillColor, isFilling, copy: true);
         }
     }
 }

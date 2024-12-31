@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,16 @@ namespace _2D_Graphics.transformations
         public Transformer()
         {
             matrix3x3SetIdentity(ref matComposite);
+        }
+
+        public double[][] getMatComposite()
+        {
+            return matComposite;
+        }
+
+        public void setMatComposite(double[][] mat)
+        {
+            matComposite = mat;
         }
 
         public void matrix3x3SetIdentity(ref double[][] mat)
@@ -103,7 +114,12 @@ namespace _2D_Graphics.transformations
                 + matComposite[1][1] * pt.X
                 + matComposite[1][2];
 
-            return new Point(Convert.ToInt32(tempX), Convert.ToInt32(tempY)) ;
+            if (tempX == double.NaN)
+                tempX = 0;
+            if (tempY == double.NaN)
+                tempY = 0;
+
+            return new Point((int)Convert.ToInt64(tempX), (int)Convert.ToInt64(tempY));
         }
 
         public List<Point> transformVerts(List<Point> verts, int nVerts)

@@ -10,11 +10,16 @@ namespace _2D_Graphics
 {
     internal class Line : Shape
     {
-        public Line(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, Boolean isFilling) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling)
+        public Line(List<Point> vertices, Point Start, Point End, float thick, Color shapeColor, Color fillColor, Boolean isFilling, Boolean copy = false) : base(vertices, Start, End, thick, shapeColor, fillColor, isFilling, copy: copy)
         {
             this.vertices = new List<Point>();
             this.vertices.Add(Start);
             this.vertices.Add(End);
+
+            if (copy)
+            {
+                this.vertices = new List<Point>(vertices);
+            }
 
             setCtrlPts();
         }
@@ -69,6 +74,11 @@ namespace _2D_Graphics
         public override ShapeType getShapeType()
         {
             return ShapeType.Line;
+        }
+
+        public override Shape Clone() {
+            // Create a deep copy of the shape
+            return new Line(new List<Point>(vertices), pStart, pEnd, thick, shapeColor, fillColor, isFilling);
         }
 
     }
