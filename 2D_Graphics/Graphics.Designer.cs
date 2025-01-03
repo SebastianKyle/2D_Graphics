@@ -55,9 +55,14 @@
             this.btn_StartFractal = new System.Windows.Forms.Button();
             this.btn_AddTransformation = new System.Windows.Forms.Button();
             this.btn_DrawFractal = new System.Windows.Forms.Button();
+            this.btnStopFractal = new System.Windows.Forms.Button();
+            this.nmrNumLoops = new System.Windows.Forms.NumericUpDown();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.lblNumLoops = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.openGLControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbFillColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPaintColor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nmrNumLoops)).BeginInit();
             this.SuspendLayout();
             // 
             // openGLControl1
@@ -330,11 +335,54 @@
             this.btn_DrawFractal.UseVisualStyleBackColor = true;
             this.btn_DrawFractal.Click += new System.EventHandler(this.btn_DrawFractal_Click);
             // 
+            // btnStopFractal
+            // 
+            this.btnStopFractal.Location = new System.Drawing.Point(928, 104);
+            this.btnStopFractal.Name = "btnStopFractal";
+            this.btnStopFractal.Size = new System.Drawing.Size(145, 25);
+            this.btnStopFractal.TabIndex = 23;
+            this.btnStopFractal.Text = "Stop Fractal";
+            this.btnStopFractal.UseVisualStyleBackColor = true;
+            this.btnStopFractal.Click += new System.EventHandler(this.btnStopFractal_Click);
+            // 
+            // nmrNumLoops
+            // 
+            this.nmrNumLoops.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nmrNumLoops.Location = new System.Drawing.Point(1243, 11);
+            this.nmrNumLoops.Name = "nmrNumLoops";
+            this.nmrNumLoops.Size = new System.Drawing.Size(60, 26);
+            this.nmrNumLoops.TabIndex = 24;
+            this.nmrNumLoops.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.nmrNumLoops.ValueChanged += new System.EventHandler(this.nmrNumLoops_ValueChanged);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // lblNumLoops
+            // 
+            this.lblNumLoops.AutoSize = true;
+            this.lblNumLoops.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNumLoops.Location = new System.Drawing.Point(1088, 14);
+            this.lblNumLoops.Name = "lblNumLoops";
+            this.lblNumLoops.Size = new System.Drawing.Size(137, 20);
+            this.lblNumLoops.TabIndex = 26;
+            this.lblNumLoops.Text = "Number of loops:";
+            // 
             // Graphics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1499, 835);
+            this.Controls.Add(this.lblNumLoops);
+            this.Controls.Add(this.nmrNumLoops);
+            this.Controls.Add(this.btnStopFractal);
             this.Controls.Add(this.btn_DrawFractal);
             this.Controls.Add(this.btn_AddTransformation);
             this.Controls.Add(this.btn_StartFractal);
@@ -363,6 +411,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.openGLControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbFillColor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPaintColor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nmrNumLoops)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -396,5 +445,9 @@
         private System.Windows.Forms.Button btn_StartFractal;
         private System.Windows.Forms.Button btn_AddTransformation;
         private System.Windows.Forms.Button btn_DrawFractal;
+        private System.Windows.Forms.Button btnStopFractal;
+        private System.Windows.Forms.NumericUpDown nmrNumLoops;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.Label lblNumLoops;
     }
 }

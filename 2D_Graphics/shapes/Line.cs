@@ -78,7 +78,7 @@ namespace _2D_Graphics
 
         public override Shape Clone() {
             // Create a deep copy of the shape
-            return new Line(new List<Point>(vertices), pStart, pEnd, thick, shapeColor, fillColor, isFilling);
+            return new Line(new List<Point>(vertices), pStart, pEnd, thick, shapeColor, fillColor, isFilling, copy: true);
         }
 
     }

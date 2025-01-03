@@ -519,5 +519,16 @@ namespace _2D_Graphics
             //gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
             painter.drawFractal(gl);
         }
+
+        private void btnStopFractal_Click(object sender, EventArgs e)
+        {
+            painter.isFractalMode = false;
+            painter.clearCanvas();
+        }
+
+        private void nmrNumLoops_ValueChanged(object sender, EventArgs e)
+        {
+            painter.fractalIterations = (int)nmrNumLoops.Value;
+        }
     }
 }
